@@ -1,9 +1,14 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "org.flywaydb.flyway" version "8.2.0"
 	id 'java'
 }
-
+flyway {
+	url = "jdbc:mysql://localhost:3306/todo_app"
+	user = "root"
+	password = "My#2411&sql"
+}
 group = 'com.chaosmonkey'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'

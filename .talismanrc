@@ -1,0 +1,6 @@
+fileignoreconfig:
+- filename: src/main/resources/db/migration/V1__CreateTodoTable.sql
+  checksum: bb05b59aa10ca98d69463aee310cf2c59eaa69b834c036e6ebf16918e574a559
+- filename: build.gradle
+  checksum: c2d4c4f490e951177b85884f6f1b535f349ffef6ea6af5ef19457917952aa8cb
+version: ""
