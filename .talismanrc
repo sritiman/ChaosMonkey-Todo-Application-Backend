@@ -3,4 +3,6 @@ fileignoreconfig:
   checksum: bb05b59aa10ca98d69463aee310cf2c59eaa69b834c036e6ebf16918e574a559
 - filename: build.gradle
   checksum: c2d4c4f490e951177b85884f6f1b535f349ffef6ea6af5ef19457917952aa8cb
+- filename: src/main/resources/application.properties
+  checksum: 5b83a554e61d4b1ad8e10c7ea4ce51a0914708ddf7f5df4d62b2810f2d976d04
 version: ""
