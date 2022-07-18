@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +47,18 @@ class TodoServiceTest {
         Todo actualTodoResponse = todoService.saveTodo(mockedTodoDTO);
 
         assertEquals(expectedTodoResponse, actualTodoResponse);
+    }
+
+    @Test
+    public void shouldReturnListOfTodos() {
+        Todo todo1 = new Todo(1, "todo Title 1", "todo body 1", 1);
+        Todo todo2 = new Todo(2, "todo Title 2", "todo body 2", 0);
+
+        when(todoRepository.findAll()).thenReturn(List.of(todo1, todo2));
+
+        List<Todo> expectedTodos = todoService.getAllTodos();
+
+        assertEquals(expectedTodos, List.of(todo1, todo2));
     }
 
 }

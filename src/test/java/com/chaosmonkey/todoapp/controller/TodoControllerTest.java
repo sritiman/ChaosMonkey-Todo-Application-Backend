@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +28,7 @@ class TodoControllerTest {
     TodoService todoService;
 
     @Test
-    public void shouldReturnResponseEntityWhenDTOIsPassedAsRequestBody() {
+    public void shouldReturnResponseEntityWithStatusCreatedWhenDTOIsPassedAsRequestBody() {
 
         TodoDTO mockedRequestBody = new TodoDTO();
         mockedRequestBody.setTitle("Mocked title");
@@ -42,6 +44,20 @@ class TodoControllerTest {
         ResponseEntity expectedResponse = new ResponseEntity(savedTodo, HttpStatus.CREATED);
 
         ResponseEntity<Todo> actualResponse = todoController.createTodo(mockedRequestBody);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void shouldReturnListOfTodosWithStatusOkWhenGetTodosControllerIsCalled() {
+        Todo todo1 = new Todo(1, "todo Title 1", "todo body 1", 1);
+        Todo todo2 = new Todo(2, "todo Title 2", "todo body 2", 0);
+
+        List<Todo> todos = List.of(todo1, todo2);
+        ResponseEntity expectedResponse = new ResponseEntity(todos, HttpStatus.OK);
+
+        when(todoService.getAllTodos()).thenReturn(todos);
+        ResponseEntity<List<Todo>> actualResponse = todoController.getTodos();
 
         assertEquals(expectedResponse, actualResponse);
     }

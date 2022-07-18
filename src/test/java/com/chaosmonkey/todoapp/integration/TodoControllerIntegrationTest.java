@@ -15,6 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,5 +51,22 @@ public class TodoControllerIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(expectedResponseString));
+    }
+
+    @Test
+    public void getAllTodosAPITest() throws Exception {
+
+        Todo todo1 = new Todo(1, "todo Title 1", "todo body 1", 1);
+        Todo todo2 = new Todo(2, "todo Title 2", "todo body 2", 0);
+        List<Todo> todos = List.of(todo1, todo2);
+
+        when(todoService.getAllTodos()).thenReturn(todos);
+        String expectedJSONResponse = new ObjectMapper().writeValueAsString(todos);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/todoservice/v1/todo")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(expectedJSONResponse));
     }
 }
