@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,10 +44,10 @@ public class TodoControllerIntegrationTest {
         when(todoService.saveTodo(requestObject)).thenReturn(createdTodoObject);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/todoservice/v1/todo")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBodyJSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .post("/todoservice/v1/todo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBodyJSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(expectedResponseString));
     }
@@ -64,9 +63,32 @@ public class TodoControllerIntegrationTest {
         String expectedJSONResponse = new ObjectMapper().writeValueAsString(todos);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/todoservice/v1/todo")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .get("/todoservice/v1/todo")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().string(expectedJSONResponse));
+    }
+
+    @Test
+    public void updateTodoAPITest() throws Exception {
+
+        TodoDTO todoDTO = new TodoDTO();
+        todoDTO.setTitle("Sample Title");
+        todoDTO.setBody("Sample Body");
+        todoDTO.setCompleted(1);
+        Todo updatedTodo = new Todo(10, "Sample Title", "Sample Body", 1);
+        when(todoService.updateTodo(todoDTO, 10)).thenReturn(updatedTodo);
+
+        String requestJSON = new ObjectMapper().writeValueAsString(todoDTO);
+        String expectedJSONResponse = new ObjectMapper().writeValueAsString(updatedTodo);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/todoservice/v1/todo/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestJSON)
+
+                ).andExpect(status().isOk())
                 .andExpect(content().string(expectedJSONResponse));
     }
 }

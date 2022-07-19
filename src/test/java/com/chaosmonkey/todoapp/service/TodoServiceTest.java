@@ -35,13 +35,7 @@ class TodoServiceTest {
         mappedTodo.setTitle("Mocked Title");
         mappedTodo.setBody("Mocked Body");
         mappedTodo.setCompleted(0);
-
-        Todo expectedTodoResponse = new Todo();
-        expectedTodoResponse.setTitle("Mocked Title");
-        expectedTodoResponse.setBody("Mocked Body");
-        expectedTodoResponse.setId(1);
-        expectedTodoResponse.setCompleted(0);
-
+        Todo expectedTodoResponse = new Todo(1,"Mocked Title","Mocked Body",1);
         when(todoRepository.save(mappedTodo)).thenReturn(expectedTodoResponse);
 
         Todo actualTodoResponse = todoService.saveTodo(mockedTodoDTO);
@@ -53,12 +47,27 @@ class TodoServiceTest {
     public void shouldReturnListOfTodos() {
         Todo todo1 = new Todo(1, "todo Title 1", "todo body 1", 1);
         Todo todo2 = new Todo(2, "todo Title 2", "todo body 2", 0);
-
         when(todoRepository.findAll()).thenReturn(List.of(todo1, todo2));
 
         List<Todo> expectedTodos = todoService.getAllTodos();
 
         assertEquals(expectedTodos, List.of(todo1, todo2));
+    }
+
+    @Test
+    public void shouldUpdateTodoAndReturnTheUpdatedTodo() {
+        TodoDTO todoDTO = new TodoDTO();
+        todoDTO.setTitle("Updated Title");
+        todoDTO.setBody("Updated Body");
+        todoDTO.setCompleted(1);
+
+        Todo mappedTodo = new Todo(3, "Updated Title","Updated Body",1);
+        Todo expectedTodo = new Todo(3, "Updated Title","Updated Body",1);
+        when(todoRepository.save(mappedTodo)).thenReturn(expectedTodo);
+
+        Todo actualTodo = todoService.updateTodo(todoDTO, 3);
+
+        assertEquals(expectedTodo, actualTodo);
     }
 
 }

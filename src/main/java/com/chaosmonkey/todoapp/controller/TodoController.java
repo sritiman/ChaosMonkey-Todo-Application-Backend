@@ -32,4 +32,11 @@ public class TodoController {
         return new ResponseEntity(todos, HttpStatus.OK);
 
     }
+
+    @PatchMapping("/todo/{id}")
+    public ResponseEntity<Todo> updateTodo(@RequestBody TodoDTO todoDTO, @PathVariable(value = "id") int id) {
+
+        Todo updatedTodo = todoService.updateTodo(todoDTO, id);
+        return new ResponseEntity(updatedTodo, HttpStatus.OK);
+    }
 }

@@ -61,4 +61,20 @@ class TodoControllerTest {
 
         assertEquals(expectedResponse, actualResponse);
     }
+
+    @Test
+    public void shouldReturnUpdatedTodoWithResponseStatusOkWhenUpdateTodoIsCalled() {
+        TodoDTO todoDTO = new TodoDTO();
+        todoDTO.setTitle("Updated Title");
+        todoDTO.setBody("Updated Body");
+        todoDTO.setCompleted(1);
+
+        Todo expectedTodo = new Todo(3, "Updated Title","Updated Body",1);
+        ResponseEntity expectedResponse = new ResponseEntity(expectedTodo, HttpStatus.OK);
+        when(todoService.updateTodo(todoDTO,3)).thenReturn(expectedTodo);
+
+        ResponseEntity<Todo> actualResponse = todoController.updateTodo(todoDTO, 3);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
 }

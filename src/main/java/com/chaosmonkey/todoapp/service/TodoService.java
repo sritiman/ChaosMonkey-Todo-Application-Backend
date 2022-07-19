@@ -28,4 +28,13 @@ public class TodoService {
     public List<Todo> getAllTodos() {
         return  todoRepository.findAll();
     }
+
+    public Todo updateTodo(TodoDTO todoDTO, int id) {
+        ModelMapper modelMapper = new ModelMapper();
+        Todo todo = modelMapper.map(todoDTO, Todo.class);
+        todo.setId(id);
+
+        Todo updatedTodo = todoRepository.save(todo);
+        return updatedTodo;
+    }
 }
