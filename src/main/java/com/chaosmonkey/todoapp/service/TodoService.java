@@ -26,7 +26,7 @@ public class TodoService {
     }
 
     public List<Todo> getAllTodos() {
-        return  todoRepository.findAll();
+        return todoRepository.findAll();
     }
 
     public Todo updateTodo(TodoDTO todoDTO, int id) {
@@ -36,5 +36,9 @@ public class TodoService {
 
         Todo updatedTodo = todoRepository.save(todo);
         return updatedTodo;
+    }
+
+    public void deleteTodo(int id) {
+        todoRepository.deleteById(id);
     }
 }

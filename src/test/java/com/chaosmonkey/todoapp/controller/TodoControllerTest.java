@@ -1,5 +1,6 @@
 package com.chaosmonkey.todoapp.controller;
 
+import com.chaosmonkey.todoapp.dto.Message;
 import com.chaosmonkey.todoapp.dto.TodoDTO;
 import com.chaosmonkey.todoapp.entity.Todo;
 import com.chaosmonkey.todoapp.service.TodoService;
@@ -15,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -69,12 +70,25 @@ class TodoControllerTest {
         todoDTO.setBody("Updated Body");
         todoDTO.setCompleted(1);
 
-        Todo expectedTodo = new Todo(3, "Updated Title","Updated Body",1);
+        Todo expectedTodo = new Todo(3, "Updated Title", "Updated Body", 1);
         ResponseEntity expectedResponse = new ResponseEntity(expectedTodo, HttpStatus.OK);
-        when(todoService.updateTodo(todoDTO,3)).thenReturn(expectedTodo);
+        when(todoService.updateTodo(todoDTO, 3)).thenReturn(expectedTodo);
 
         ResponseEntity<Todo> actualResponse = todoController.updateTodo(todoDTO, 3);
 
         assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void shouldDeleteTodoWithGivenIdAndReturnResponseStatusOK() {
+        int id = 3;
+        ResponseEntity<Message> expectedResponse = new ResponseEntity<>(
+                new Message(id, "deleted"), HttpStatus.OK
+        );
+        doNothing().when(todoService).deleteTodo(3);
+
+        ResponseEntity<Message> actualResponse = todoController.deleteTodo(id);
+        assertEquals(expectedResponse, actualResponse);
+        verify(todoService, times(1)).deleteTodo(3);
     }
 }

@@ -1,5 +1,6 @@
 package com.chaosmonkey.todoapp.controller;
 
+import com.chaosmonkey.todoapp.dto.Message;
 import com.chaosmonkey.todoapp.dto.TodoDTO;
 import com.chaosmonkey.todoapp.entity.Todo;
 import com.chaosmonkey.todoapp.service.TodoService;
@@ -38,5 +39,13 @@ public class TodoController {
 
         Todo updatedTodo = todoService.updateTodo(todoDTO, id);
         return new ResponseEntity(updatedTodo, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/todo/{id}")
+    public ResponseEntity<Message> deleteTodo(@PathVariable(value = "id") int id) {
+        todoService.deleteTodo(id);
+        return new ResponseEntity(
+                new Message(id, "deleted"), HttpStatus.OK
+        );
     }
 }

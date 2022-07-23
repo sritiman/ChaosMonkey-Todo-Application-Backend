@@ -1,6 +1,7 @@
 package com.chaosmonkey.todoapp.integration;
 
 import com.chaosmonkey.todoapp.controller.TodoController;
+import com.chaosmonkey.todoapp.dto.Message;
 import com.chaosmonkey.todoapp.dto.TodoDTO;
 import com.chaosmonkey.todoapp.entity.Todo;
 import com.chaosmonkey.todoapp.service.TodoService;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,5 +91,20 @@ public class TodoControllerIntegrationTest {
 
                 ).andExpect(status().isOk())
                 .andExpect(content().string(expectedJSONResponse));
+    }
+
+    @Test
+    public void deleteTodoAPITest() throws Exception {
+        int id = 1;
+        doNothing().when(todoService).deleteTodo(id);
+        String expectedJSONResponse = new ObjectMapper().writeValueAsString(
+                new Message(id, "deleted")
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/todoservice/v1/todo/" + id)
+                ).andExpect(status().isOk())
+                .andExpect(content().string(expectedJSONResponse));
+        verify(todoService, times(1)).deleteTodo(id);
     }
 }

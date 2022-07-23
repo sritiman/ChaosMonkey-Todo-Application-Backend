@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -35,7 +35,7 @@ class TodoServiceTest {
         mappedTodo.setTitle("Mocked Title");
         mappedTodo.setBody("Mocked Body");
         mappedTodo.setCompleted(0);
-        Todo expectedTodoResponse = new Todo(1,"Mocked Title","Mocked Body",1);
+        Todo expectedTodoResponse = new Todo(1, "Mocked Title", "Mocked Body", 1);
         when(todoRepository.save(mappedTodo)).thenReturn(expectedTodoResponse);
 
         Todo actualTodoResponse = todoService.saveTodo(mockedTodoDTO);
@@ -61,13 +61,22 @@ class TodoServiceTest {
         todoDTO.setBody("Updated Body");
         todoDTO.setCompleted(1);
 
-        Todo mappedTodo = new Todo(3, "Updated Title","Updated Body",1);
-        Todo expectedTodo = new Todo(3, "Updated Title","Updated Body",1);
+        Todo mappedTodo = new Todo(3, "Updated Title", "Updated Body", 1);
+        Todo expectedTodo = new Todo(3, "Updated Title", "Updated Body", 1);
         when(todoRepository.save(mappedTodo)).thenReturn(expectedTodo);
 
         Todo actualTodo = todoService.updateTodo(todoDTO, 3);
 
         assertEquals(expectedTodo, actualTodo);
+    }
+
+    @Test
+    public void shouldDeleteTodoWithGivenId() {
+        int id = 1;
+        doNothing().when(todoRepository).deleteById(1);
+
+        todoService.deleteTodo(id);
+        verify(todoRepository, times(1)).deleteById(id);
     }
 
 }
